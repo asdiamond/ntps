@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+FILES=/Users/adiaz/Documents/CS4311/ntps/GUIForms/UI/*
+for f in $FILES
+do
+  pyuic5 -x  $f -o ${f:0:${#f} - 3}.py
+done

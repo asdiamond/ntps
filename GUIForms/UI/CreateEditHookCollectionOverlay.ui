@@ -15,16 +15,16 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="hookCollectionNameLineEdit"/>
    </item>
    <item row="4" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit_4"/>
+    <widget class="QLineEdit" name="executionSequenceLineEdit"/>
    </item>
    <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit_2"/>
+    <widget class="QLineEdit" name="descriptionLineEdit"/>
    </item>
    <item row="3" column="1" colspan="3">
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="statusComboBox"/>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_4">
@@ -41,7 +41,7 @@
     </widget>
    </item>
    <item row="7" column="3">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="cancelPushButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -74,23 +74,9 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="hookCheckBox">
         <property name="text">
          <string>Hook 1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox_2">
-        <property name="text">
-         <string>Hook 2</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox_3">
-        <property name="text">
-         <string>Hook 3</string>
         </property>
        </widget>
       </item>
@@ -98,7 +84,7 @@
     </widget>
    </item>
    <item row="7" column="4">
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="savePushButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -117,13 +103,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QComboBox" name="comboBox_2"/>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_3"/>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_4"/>
+       <widget class="QComboBox" name="hookStatusComboBox"/>
       </item>
      </layout>
     </widget>
@@ -135,13 +115,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QLineEdit" name="lineEdit_3"/>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_5"/>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_6"/>
+       <widget class="QLineEdit" name="hookExecutionSequenceLineEdit"/>
       </item>
      </layout>
     </widget>

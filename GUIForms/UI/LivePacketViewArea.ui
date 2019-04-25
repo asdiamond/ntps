@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1361</width>
-    <height>731</height>
+    <width>1258</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="4">
-    <widget class="QComboBox" name="comboBox_2"/>
+    <widget class="QComboBox" name="interceptionBehaviorComboBox"/>
    </item>
    <item row="0" column="3">
     <widget class="QLabel" name="label_2">
@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="proxyBehaviorComboBox"/>
    </item>
    <item row="0" column="1">
     <widget class="QLabel" name="label">
@@ -35,16 +35,16 @@
     </widget>
    </item>
    <item row="0" column="10">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="queueSizeLineEdit"/>
    </item>
-   <item row="4" column="1" colspan="10">
+   <item row="2" column="1" colspan="10">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Packet Area</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QTabWidget" name="tabWidget">
+       <widget class="QTabWidget" name="packetAreaTabWidget">
         <property name="tabPosition">
          <enum>QTabWidget::North</enum>
         </property>
@@ -60,7 +60,7 @@
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QListWidget" name="listWidget_2">
+           <widget class="QListWidget" name="dissectedListWidget">
             <item>
              <property name="text">
               <string>Frame 718: frame, eth, ip, tcp</string>
@@ -79,9 +79,9 @@
          <attribute name="title">
           <string>Binary</string>
          </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QTextEdit" name="textEdit">
+           <widget class="QTextEdit" name="binaryTextEdit">
             <property name="html">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -97,9 +97,9 @@ p, li { white-space: pre-wrap; }
          <attribute name="title">
           <string>HEX</string>
          </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QTextEdit" name="textEdit_4">
+           <widget class="QTextEdit" name="hexTextEdit">
             <property name="html">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -114,7 +114,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_10">
+       <widget class="QPushButton" name="clearPacketAreaPushButton">
         <property name="text">
          <string>Clear</string>
         </property>
@@ -123,27 +123,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="5" column="6" colspan="4">
-    <widget class="QWidget" name="widget" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QPushButton" name="pushButton_4">
-        <property name="text">
-         <string>+</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string>-</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="5">
+   <item row="3" column="1" colspan="5">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -156,7 +136,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="3">
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="forwardPushButton">
         <property name="text">
          <string>Forward</string>
         </property>
@@ -170,7 +150,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="saveModificationPushButton">
         <property name="text">
          <string>Save Modification</string>
         </property>
@@ -183,37 +163,9 @@ p, li { white-space: pre-wrap; }
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QLabel" name="label_15">
+          <widget class="QLabel" name="maskLabel">
            <property name="text">
             <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>1</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_19">
-           <property name="text">
-            <string>2</string>
            </property>
           </widget>
          </item>
@@ -227,37 +179,9 @@ p, li { white-space: pre-wrap; }
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLineEdit" name="lineEdit_14">
+          <widget class="QLineEdit" name="valueLineEdit">
            <property name="text">
             <string>08</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_16">
-           <property name="text">
-            <string>00</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_17">
-           <property name="text">
-            <string>6861</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_15">
-           <property name="text">
-            <string>809e</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_13">
-           <property name="text">
-            <string>0100</string>
            </property>
           </widget>
          </item>
@@ -270,73 +194,17 @@ p, li { white-space: pre-wrap; }
          <string>FieldName</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="checkBox_2">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="checkBox_4">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="checkBox_3">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QCheckBox" name="checkBox_5">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="checkBox">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_8">
+          <widget class="QLineEdit" name="fieldLineEdit">
            <property name="text">
             <string>icmp.type</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_9">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="fieldCheckBox">
            <property name="text">
-            <string>icmp.code</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_10">
-           <property name="text">
-            <string>icmp.checksum</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_11">
-           <property name="text">
-            <string>icmp.ident</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="lineEdit_12">
-           <property name="text">
-            <string>icmp.seq</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -344,7 +212,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="4">
-       <widget class="QPushButton" name="pushButton_7">
+       <widget class="QPushButton" name="dropPushButton">
         <property name="text">
          <string>Drop</string>
         </property>
@@ -357,19 +225,7 @@ p, li { white-space: pre-wrap; }
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <widget class="QComboBox" name="comboBox_3"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_4"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_5"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_6"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_7"/>
+          <widget class="QComboBox" name="displayFormatComboBox"/>
          </item>
         </layout>
        </widget>
@@ -377,21 +233,14 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="0" column="9">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Queue Size</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="10">
+   <item row="1" column="1" colspan="10">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Capture Filter</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="captureFilterLineEdit"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
@@ -400,24 +249,44 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="pushButton">
+      <item row="0" column="4">
+       <widget class="QPushButton" name="clearFilterPushButton">
         <property name="text">
-         <string>Apply</string>
+         <string>Clear</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="4">
-       <widget class="QPushButton" name="pushButton_2">
+      <item row="0" column="3">
+       <widget class="QPushButton" name="applyFilterPushButton">
         <property name="text">
-         <string>Clear</string>
+         <string>Apply</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="5" column="10">
+   <item row="3" column="6" colspan="4">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QPushButton" name="addPushButton">
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="removePushButton">
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="10">
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
       <string>Fuzzing Area</string>
@@ -445,7 +314,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_6"/>
+       <widget class="QLineEdit" name="minimumLineEdit"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_9">
@@ -462,71 +331,39 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="4" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_7"/>
+       <widget class="QLineEdit" name="maximumLineEdit"/>
       </item>
       <item row="5" column="2">
-       <widget class="QPushButton" name="pushButton_9">
+       <widget class="QPushButton" name="stopFuzzPushButton">
         <property name="text">
          <string>Stop</string>
         </property>
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QPushButton" name="pushButton_8">
+       <widget class="QPushButton" name="fuzzPushButton">
         <property name="text">
          <string>Fuzz</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_5"/>
+       <widget class="QLineEdit" name="expectedReturnTypeLineEdit"/>
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_4"/>
+       <widget class="QLineEdit" name="selectedFieldNameLineEdit"/>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_3"/>
+       <widget class="QLineEdit" name="selectedPacketNameLineEdit"/>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" colspan="10">
-    <widget class="QGroupBox" name="groupBox_9">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="0" column="9">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Queue Size</string>
      </property>
-     <property name="title">
-      <string>PCAP File</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_7">
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_19"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>PCAP File</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="pushButton_13">
-        <property name="text">
-         <string>Open</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QPushButton" name="pushButton_14">
-        <property name="text">
-         <string>Cancel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>

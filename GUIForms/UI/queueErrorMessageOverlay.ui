@@ -21,7 +21,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="1" column="0" alignment="Qt::AlignRight">
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="okPushButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>

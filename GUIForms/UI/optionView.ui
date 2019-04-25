@@ -15,28 +15,28 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="hookPushButton">
      <property name="text">
       <string>Hook</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="hookCollectionPushButton">
      <property name="text">
       <string>Hook Collection</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="livePacketPushButton">
      <property name="text">
       <string>Live Packet</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="packetFromPCAPPushButton">
      <property name="text">
       <string>Packet from PCAP</string>
      </property>
