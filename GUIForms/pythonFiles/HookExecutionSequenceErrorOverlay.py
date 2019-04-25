@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Form(object):
+class Ui_Form(QObject):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(548, 317)
@@ -46,6 +46,13 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.groupBox)
 
         self.retranslateUi(Form)
+
+
+        self.yesPushButton.clicked.connect(self.yesPushButtonClicked)
+        self.noPushButton.clicked.connect(self.noPushButtonClicked)
+
+
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -58,7 +65,13 @@ class Ui_Form(object):
 "sequencing for the reset of hooks within this hook collection?"))
         self.noPushButton.setText(_translate("Form", "No"))
 
+    @pyqtSlot( )
+    def yesPushButtonClicked( self ):
+        self.label.setText("yesPushButtonClicked")
 
+    @pyqtSlot( )
+    def noPushButtonClicked( self ):
+        self.label.setText("noPushButtonClicked")
 
 
 if __name__ == "__main__":

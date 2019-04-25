@@ -7,10 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Form(object):
+class Ui_Form(QObject):
     def setupUi(self, Form):
+    #The following is setting up the GUI, the widgets, their positioning, etc
         Form.setObjectName("Form")
         Form.resize(1258, 572)
         self.gridLayout = QtWidgets.QGridLayout(Form)
@@ -203,7 +204,44 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.label_3, 0, 9, 1, 1)
 
         self.retranslateUi(Form)
-        self.packetAreaTabWidget.setCurrentIndex(2)
+
+    #set up the event listeners for each  widget
+
+        self.clearPacketAreaPushButton.clicked.connect(self.clearPacketAreaPushButtonClicked)
+        self.saveModificationPushButton.clicked.connect(self.saveModificationPushButtonClicked)
+        self.dropPushButton.clicked.connect(self.dropPushButtonClicked)
+        self.clearFilterPushButton.clicked.connect(self.clearFilterPushButtonClicked)
+        self.applyFilterPushButton.clicked.connect(self.applyFilterPushButtonClicked)
+        self.addPushButton.clicked.connect(self.addPushButtonClicked)
+        self.removePushButton.clicked.connect(self.removePushButtonClicked)
+        self.stopFuzzPushButton.clicked.connect(self.stopFuzzPushButtonClicked)
+        self.fuzzPushButton.clicked.connect(self.fuzzPushButtonClicked)
+        self.forwardPushButton.clicked.connect(self.forwardPushButtonClicked)
+
+        self.queueSizeLineEdit.textEdited.connect(self.queueSizeLineEdited)
+        self.valueLineEdit.textEdited.connect(self.valueLineEdited)
+        self.fieldLineEdit.textEdited.connect(self.fieldLineEdited)
+        self.captureFilterLineEdit.textEdited.connect(self.captureFilterLineEdited)
+        self.minimumLineEdit.textEdited.connect(self.minimumLineEdited)
+        self.maximumLineEdit.textEdited.connect(self.maximumLineEdited)
+        self.expectedReturnTypeLineEdit.textEdited.connect(self.expectedReturnTypeLineEdited)
+        self.selectedFieldNameLineEdit.textEdited.connect(self.selectedFieldNameLineEdited)
+        self.selectedPacketNameLineEdit.textEdited.connect(self.selectedPacketNameLineEdited)
+
+        self.interceptionBehaviorComboBox.currentIndexChanged.connect(self.interceptionBehaviorComboBoxIndexChanged)
+        self.proxyBehaviorComboBox.currentIndexChanged.connect(self.proxyBehaviorComboBoxIndexChanged)
+        self.displayFormatComboBox.currentIndexChanged.connect(self.displayFormatComboBoxIndexChanged)
+
+        self.fieldCheckBox.stateChanged.connect(self.fieldCheckBoxStateChanged)
+
+        self.binaryTextEdit.textChanged.connect(self.binaryTextEditChanged)
+        self.hexTextEdit.textChanged.connect(self.hexTextEditChanged)
+
+        self.packetAreaTabWidget.currentChanged.connect(self.packetAreaTabWidgetChanged)
+
+        self.dissectedListWidget.itemClicked.connect(self.dissectedListWidgetItemClicked)
+
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -221,16 +259,16 @@ class Ui_Form(object):
         self.dissectedListWidget.setSortingEnabled(__sortingEnabled)
         self.packetAreaTabWidget.setTabText(self.packetAreaTabWidget.indexOf(self.tab), _translate("Form", "Dissected"))
         self.binaryTextEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\x00\\x02\\x157\\xa2D\\x00\\xae\\fx3R\\xaa\\xd1\\x08\\x00E\\x00\\x01\\x00\\x00@\\x06&lt;\\xc0</p></body></html>"))
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\x00\\x02\\x157\\xa2D\\x00\\xae\\fx3R\\xaa\\xd1\\x08\\x00E\\x00\\x01\\x00\\x00@\\x06&lt;\\xc0</p></body></html>"))
         self.packetAreaTabWidget.setTabText(self.packetAreaTabWidget.indexOf(self.tab_2), _translate("Form", "Binary"))
         self.hexTextEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">00 02 15 37 A2 44 AE F3 52 AA D1 08 00 45 00 ...7.D...R...E</p></body></html>"))
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">00 02 15 37 A2 44 AE F3 52 AA D1 08 00 45 00 ...7.D...R...E</p></body></html>"))
         self.packetAreaTabWidget.setTabText(self.packetAreaTabWidget.indexOf(self.tab_3), _translate("Form", "HEX"))
         self.clearPacketAreaPushButton.setText(_translate("Form", "Clear"))
         self.groupBox_3.setTitle(_translate("Form", "Field Area"))
@@ -261,8 +299,120 @@ class Ui_Form(object):
         self.fuzzPushButton.setText(_translate("Form", "Fuzz"))
         self.label_3.setText(_translate("Form", "Queue Size"))
 
+# Push button slots
+    @pyqtSlot( )
+    def clearPacketAreaPushButtonClicked( self ):
+        self.label.setText("clearPacketAreaPushButtonClicked")
 
+    @pyqtSlot( )
+    def saveModificationPushButtonClicked( self ):
+        self.label.setText("saveModificationPushButtonClicked")
 
+    @pyqtSlot( )
+    def dropPushButtonClicked( self ):
+        self.label.setText("dropPushButtonClicked")
+
+    @pyqtSlot( )
+    def clearFilterPushButtonClicked( self ):
+        self.label.setText("clearFilterPushButtonClicked")
+
+    @pyqtSlot( )
+    def applyFilterPushButtonClicked( self ):
+        self.label.setText("applyFilterPushButtonClicked")
+
+    @pyqtSlot( )
+    def addPushButtonClicked( self ):
+        self.label.setText("addPushButtonClicked")
+
+    @pyqtSlot( )
+    def removePushButtonClicked( self ):
+        self.label.setText("cancelPushButtonClicked")
+
+    @pyqtSlot( )
+    def stopFuzzPushButtonClicked( self ):
+        self.label.setText("stopFuzzPushButtonClicked")
+
+    @pyqtSlot( )
+    def fuzzPushButtonClicked( self ):
+        self.label.setText("fuzzPushButtonClicked")
+
+    @pyqtSlot( )
+    def forwardPushButtonClicked( self ):
+        self.label.setText("forwardPushButtonClicked")
+
+# Line Edit Slots
+    @pyqtSlot(str)
+    def queueSizeLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def valueLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def captureFilterLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def fieldLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def minimumLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def maximumLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def expectedReturnTypeLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def selectedFieldNameLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def selectedPacketNameLineEdited( self, text ):
+        self.label.setText(text)
+
+# Combo Box Slots
+    @pyqtSlot(int)
+    def interceptionBehaviorComboBoxIndexChanged( self, index ):
+        self.label.setText(str(index))
+
+    @pyqtSlot(int)
+    def proxyBehaviorComboBoxIndexChanged( self, index ):
+        self.label.setText(str(index))
+
+    @pyqtSlot(int)
+    def displayFormatComboBoxIndexChanged( self, index ):
+        self.label.setText(str(index))
+
+# Check Box Slots
+    @pyqtSlot(int)
+    def fieldCheckBoxStateChanged( self, state ):
+        self.label.setText(str(state))
+
+# Text Edit Slots
+    @pyqtSlot( )
+    def binaryTextEditChanged( self ):
+        self.label.setText(self.binaryTextEdit.toPlainText())
+
+    @pyqtSlot( )
+    def hexTextEditChanged( self ):
+        self.label.setText(self.hexTextEdit.toPlainText())
+
+# Tab Widget Slots
+    @pyqtSlot(int)
+    def packetAreaTabWidgetChanged( self, index ):
+        self.label.setText(str(index))
+
+# List Widget Slots
+    @pyqtSlot()
+    def dissectedListWidgetItemClicked( self ):
+        self.label.setText("dissectedListWidgetItemClicked")
 
 if __name__ == "__main__":
     import sys

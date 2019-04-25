@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Form(object):
+class Ui_Form(QObject):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(429, 300)
@@ -44,11 +44,24 @@ class Ui_Form(object):
         self.savePushButton.setSizePolicy(sizePolicy)
         self.savePushButton.setObjectName("savePushButton")
         self.gridLayout.addWidget(self.savePushButton, 3, 1, 1, 1)
-        self.canelPushButton = QtWidgets.QPushButton(Form)
-        self.canelPushButton.setObjectName("canelPushButton")
-        self.gridLayout.addWidget(self.canelPushButton, 3, 2, 1, 1)
+        self.cancelPushButton = QtWidgets.QPushButton(Form)
+        self.cancelPushButton.setObjectName("cancelPushButton")
+        self.gridLayout.addWidget(self.cancelPushButton, 3, 2, 1, 1)
 
         self.retranslateUi(Form)
+
+        #set up the event listeners for each  widget
+        self.hookPathLineEdit.textEdited.connect(self.hookPathLineEdited)
+        self.hookNameLineEdit.textEdited.connect(self.hookNameLineEdited)
+        self.descriptionLineEdit.textEdited.connect(self.descriptionLineEdited)
+        
+        self.browsePushButton.clicked.connect(self.browsePushButtonClicked)
+        self.savePushButton.clicked.connect(self.savePushButtonClicked)
+        self.cancelPushButton.clicked.connect(self.cancelPushButtonClicked)
+
+
+
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -59,10 +72,33 @@ class Ui_Form(object):
         self.label_2.setText(_translate("Form", "Description"))
         self.browsePushButton.setText(_translate("Form", "Browse"))
         self.savePushButton.setText(_translate("Form", "Save"))
-        self.canelPushButton.setText(_translate("Form", "Cancel"))
+        self.cancelPushButton.setText(_translate("Form", "Cancel"))
 
 
+    @pyqtSlot(str)
+    def hookPathLineEdited( self, text):
+        self.label.setText(text)
+        
 
+    @pyqtSlot(str)
+    def hookNameLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot(str)
+    def descriptionLineEdited( self, text ):
+        self.label.setText(text)
+
+    @pyqtSlot( )
+    def browsePushButtonClicked( self ):
+        self.label.setText("browsePushButtonClicked")
+
+    @pyqtSlot( )
+    def savePushButtonClicked( self ):
+        self.label.setText("savePushButtonClicked")
+
+    @pyqtSlot( )
+    def cancelPushButtonClicked( self ):
+        self.label.setText("cancelPushButtonClicked")
 
 if __name__ == "__main__":
     import sys

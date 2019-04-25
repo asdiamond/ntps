@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/Users/adiaz/Documents/CS4311/ntps/GUIForms/UI/queueErrorMessageOverlay.ui'
+# Form implementation generated from reading ui file '/Users/adiaz/Documents/CS4311/ntps/GUIForms/UI/proxyBehaviorDisabledNotificationOverlay.ui'
 #
 # Created by: PyQt5 UI code generator 5.12
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Dialog(object):
+class Ui_Dialog(QObject):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(518, 306)
+        Dialog.resize(558, 273)
         self.horizontalLayout = QtWidgets.QHBoxLayout(Dialog)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.groupBox = QtWidgets.QGroupBox(Dialog)
@@ -26,24 +26,32 @@ class Ui_Dialog(object):
         sizePolicy.setHeightForWidth(self.okPushButton.sizePolicy().hasHeightForWidth())
         self.okPushButton.setSizePolicy(sizePolicy)
         self.okPushButton.setObjectName("okPushButton")
-        self.gridLayout.addWidget(self.okPushButton, 1, 0, 1, 1, QtCore.Qt.AlignRight)
+        self.gridLayout.addWidget(self.okPushButton, 2, 0, 1, 1, QtCore.Qt.AlignRight)
         self.label = QtWidgets.QLabel(self.groupBox)
         self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
         self.horizontalLayout.addWidget(self.groupBox)
 
         self.retranslateUi(Dialog)
+
+
+        self.okPushButton.clicked.connect(self.okPushButtonClicked)
+
+
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.groupBox.setTitle(_translate("Dialog", "Queue Error Message"))
+        self.groupBox.setTitle(_translate("Dialog", "Proxy Behavior Disabled Notification"))
         self.okPushButton.setText(_translate("Dialog", "OK"))
-        self.label.setText(_translate("Dialog", "The queue has reached its capability.  No new packets will be\n"
-"excepted until there is space available."))
+        self.label.setText(_translate("Dialog", "Proxy behavior has been disabled.  The system has restored  to \n"
+" the previous proxy settings and it will stop appending packet \n"
+" information to the live traffic PCAP file."))
 
-
+    @pyqtSlot( )
+    def okPushButtonClicked( self ):
+        self.label.setText("okPushButtonClicked")
 
 
 if __name__ == "__main__":

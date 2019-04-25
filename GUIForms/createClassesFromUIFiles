@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+#replace with your own path to the UI file
 FILES=/Users/adiaz/Documents/CS4311/ntps/GUIForms/UI/*
 for f in $FILES
 do

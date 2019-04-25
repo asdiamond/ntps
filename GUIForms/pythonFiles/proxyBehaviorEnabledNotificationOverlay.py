@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Form(object):
+class Ui_Form(QObject):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(635, 362)
@@ -33,6 +33,11 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.groupBox)
 
         self.retranslateUi(Form)
+
+
+        self.okPushButton.clicked.connect(self.okPushButtonClicked)
+
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -44,7 +49,9 @@ class Ui_Form(object):
 "the system’s proxy settings and will restore to it when the proxy\n"
 "behavior is disabled."))
 
-
+    @pyqtSlot( )
+    def okPushButtonClicked( self ):
+        self.label.setText("okPushButtonClicked")
 
 
 if __name__ == "__main__":

@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Dialog(object):
+class Ui_Dialog(QObject):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(209, 718)
@@ -29,6 +29,14 @@ class Ui_Dialog(object):
         self.verticalLayout.addWidget(self.packetFromPCAPPushButton)
 
         self.retranslateUi(Dialog)
+
+
+        self.hookPushButton.clicked.connect(self.hookPushButtonClicked)
+        self.hookCollectionPushButton.clicked.connect(self.hookCollectionPushButtonClicked)
+        self.livePacketPushButton.clicked.connect(self.livePacketPushButtonClicked)
+        self.packetFromPCAPPushButton.clicked.connect(self.packetFromPCAPPushButtonClicked)
+
+        
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -40,7 +48,21 @@ class Ui_Dialog(object):
         self.packetFromPCAPPushButton.setText(_translate("Dialog", "Packet from PCAP"))
 
 
+    @pyqtSlot( )
+    def hookPushButtonClicked( self ):
+        self.hookPushButton.setText("hookPushButtonClicked")
 
+    @pyqtSlot( )
+    def hookCollectionPushButtonClicked( self ):
+        self.hookPushButton.setText("hookCollectionPushButtonClicked")
+
+    @pyqtSlot( )
+    def livePacketPushButtonClicked( self ):
+        self.hookPushButton.setText("livePacketPushButtonClicked")
+
+    @pyqtSlot( )
+    def packetFromPCAPPushButtonClicked( self ):
+        self.hookPushButton.setText("packetFromPCAPPushButtonClicked")
 
 if __name__ == "__main__":
     import sys

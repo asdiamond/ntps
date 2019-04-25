@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
-
-class Ui_Form(object):
+class Ui_Form(QObject):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(798, 707)
@@ -35,8 +35,13 @@ class Ui_Form(object):
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setObjectName("label_3")
         self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
-
         self.retranslateUi(Form)
+
+
+        # self.contentListView has no signals to connect to, TODO implement Tableview
+        # self.optionListView has no signals to connect to, TODO implement Tableview
+
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
