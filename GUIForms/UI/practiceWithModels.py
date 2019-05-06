@@ -44,8 +44,7 @@ class GroupModel(QtGui.QStandardItemModel):
             layers = []
             summary = p.summary().split(' / ')
             for s in summary:
-                layer = s.split(' ')[0]
-                print(layer)
+                layer = s.split(' ')
                 if layer is 'Ether':
                     layer = 'Ethernet: Src: ' + p['Ether'].src + ', Dst: ' + p['Ether'].dst
                 elif layer is 'IP':
@@ -68,7 +67,8 @@ class GroupModel(QtGui.QStandardItemModel):
         # }
         for group, layers in displayPackets.items():
             group_item = self.add_group(group)
-            self.append_element_to_group(group_item, layer)
+            for layer in layers:
+                self.append_element_to_group(group_item, layer)
 
     def add_group(self, group_name):
         item_root = QtGui.QStandardItem()
