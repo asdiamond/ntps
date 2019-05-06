@@ -35,7 +35,7 @@ class HookCollection:
         return self.__execution_number
 
     # Getter for hook collection's number or hooks
-    # / length of the colleciotn
+    # / length of the collection
     def len(self):
         return self.__num_hooks
 
