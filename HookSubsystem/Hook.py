@@ -1,4 +1,6 @@
 import os
+
+
 class Hook:
     __name: str
     __description: str
@@ -23,8 +25,8 @@ class Hook:
         return self.__path
 
     # Sets the number of associations to a new number
-    def set_collection_association_number(self, newNumber: int):
-        self.__collection_association_number = newNumber
+    def set_collection_association_number(self, new_number: int):
+        self.__collection_association_number = new_number
 
     # Toggles the status of the hook
     def hook_toggle(self):
