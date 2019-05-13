@@ -1,4 +1,4 @@
-from HookSubsystem import Hook
+from HookSubsystem.Hook import Hook
 
 
 class HookCollection:
@@ -11,7 +11,7 @@ class HookCollection:
 
     #Initializer
     def __init__(self, name: str,description: str,execution_number: int):
-        self.hook_list = []
+        self.__hook_list = []
         self.__name = name
         self.__description = description
         self.__execution_number = execution_number
@@ -38,6 +38,10 @@ class HookCollection:
     # / length of the collection
     def len(self):
         return self.__num_hooks
+
+    # Getter for hook list
+    def get_list(self):
+        return self.__hook_list
 
     def add_hook(self, hook: Hook):
         self.hook_list.append(hook)
