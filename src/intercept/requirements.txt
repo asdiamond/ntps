@@ -2,3 +2,5 @@
 # So just install it once and then comment it out.
 pypacker
 #netfilterqueue 
+#scapy
+netfilterqueue
