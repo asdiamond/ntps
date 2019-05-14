@@ -7,9 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QObject, pyqtSlot
 
-class Ui_Dialog(QObject):
+
+class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(581, 264)
@@ -39,42 +39,20 @@ class Ui_Dialog(QObject):
         self.gridLayout.addWidget(self.cancelPushButton, 2, 2, 1, 1)
 
         self.retranslateUi(Dialog)
-
-        self.descriptionLineEdit.textEdited.connect(self.descriptionLineEdited)
-        self.fuzzedPCAPNameLineEdit.textEdited.connect(self.fuzzedPCAPNameLineEdited)
-
-        self.savePushButton.clicked.connect(self.savePushButtonClicked)
-        self.cancelPushButton.clicked.connect(self.cancelPushButtonClicked)
-
-
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.fuzzedPCAPNameLineEdit.setPlaceholderText(_translate("Dialog", "PCAP File"))
+        self.fuzzedPCAPNameLineEdit.setPlaceholderText(_translate("Dialog", "                        PCAP File"))
         self.savePushButton.setText(_translate("Dialog", "Save"))
-        self.descriptionLineEdit.setPlaceholderText(_translate("Dialog", "Description"))
+        self.descriptionLineEdit.setPlaceholderText(_translate("Dialog", "                        Description"))
         self.label_2.setText(_translate("Dialog", "Description"))
         self.label.setText(_translate("Dialog", "Fuzzed PCAP \n"
 " Name"))
         self.cancelPushButton.setText(_translate("Dialog", "Cancel"))
 
-    @pyqtSlot(str)
-    def descriptionLineEdited( self, text ):
-        self.label.setText(text)
 
-    @pyqtSlot(str)
-    def fuzzedPCAPNameLineEdited( self, text ):
-        self.label.setText(text)
-
-    @pyqtSlot( )
-    def savePushButtonClicked( self ):
-        self.label.setText("savePushButtonClicked")
-
-    @pyqtSlot( )
-    def cancelPushButtonClicked( self ):
-        self.label.setText("cancelPushButtonClicked")
 
 
 if __name__ == "__main__":
