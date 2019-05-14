@@ -1,5 +1,5 @@
 from HookCollectionSubsystem.HookCollection import HookCollection
-from HookSubsystem import Hook
+from HookSubsystem import Hook, HookManager
 
 
 class HookCollectionManager:
@@ -43,3 +43,9 @@ class HookCollectionManager:
     def remove_hook_from_collections(self, hook: Hook):
         for collection in self.__hook_collection_list:
             collection.remove_hook(hook)
+
+    # Run all enabled collections
+    def run_hooks(self, hook_manager: HookManager, parameter):
+        for collection in self.__hook_collection_list:
+            if collection.get_status():
+                collection.run_collection()
