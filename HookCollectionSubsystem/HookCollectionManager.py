@@ -10,15 +10,15 @@ class HookCollectionManager:
         self.__num_collections = 0
 
     # Update hook collection's execution seq number
-    def update(self, hook_collection: HookCollection, sequence_number: int):
+    def update_collection_seq_number(self, hook_collection: HookCollection, sequence_number: int):
         hook_collection.set_execution_number(sequence_number)
 
     # Update hook collection's name
-    def update(self, hook_collection: HookCollection, name: str):
+    def update_colllection_name(self, hook_collection: HookCollection, name: str):
         hook_collection.set_name(name)
 
     # Update hook collection's description
-    def update(self, hook_collection: HookCollection, description: str):
+    def update_collection_description(self, hook_collection: HookCollection, description: str):
         hook_collection.set_description(description)
 
     # Add a hook collection
