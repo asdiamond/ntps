@@ -1,11 +1,13 @@
 from netfilterqueue import NetfilterQueue
 import subprocess
 
+# the function to put intercepted packets on the blocking queue
+from intercepted import put
+
 
 def produce(pkt):
     print(pkt)
-
-    # pkt.accept()
+    put(pkt)
 
 
 def start_interception():
@@ -25,8 +27,8 @@ def start_interception():
         nfq.run()
     except KeyboardInterrupt:
         subprocess.call(['./restore.sh', fname])
+        nfq.unbind()
         print('Goodbye!')
 
-    nfq.unbind()
 
 start_interception()
