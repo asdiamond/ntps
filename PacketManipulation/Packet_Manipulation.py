@@ -10,14 +10,25 @@ def sendPackets(pkt):
 def readFromPCAP(filename):
 	packets = rdpcap("filename")
 
+#Sniff can be used as a capture filter if enough attributes are provided
+#Example: pkts = sniff(count = 100, filter = "icmp and ip host 4.2.2.1")
 def capturePackets():
 	packets = sniff()
+	
+def capturePackets(limit):
+	packets = sniff(count = limit)
 	
 def displayPackets():
 	_.summary()
 
 def displayPackets(packets):
 	packets.summary()
+
+def viewPacketInfo():
+	_.show()
+	
+def viewPacketInfo(pkt):
+	pkt.show()
 
 #To disassemble the packet and get a specific protocol layer, use the [] operator: _[IP]
 def viewProtocol(protocol):
@@ -35,6 +46,9 @@ def viewLayers(pkt):
 def viewLayerFields(pkt, layer):
 	pkt.ls(layer)
 
+def checkLayer(layer):
+	return _.haslayer(layer)
+
 #Packet layer fields are python variables and can be modified as such
 #to edit specific fields in a given layer, packet[IP].dst = "1.2.3.4"
 
@@ -49,6 +63,9 @@ def modifyLayerSrc(layer, source):
 
 def modifyLayerSrc(pkt, layer, source):
 	pkt[layer].src = source
+	
+def modifyLayerType(layer, tp):
+	_[layer].type = tp
 
 #to view a packet source port use, packet.sport
 #to modify the source port, packet.sport = 443

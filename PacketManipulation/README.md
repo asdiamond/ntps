@@ -24,3 +24,15 @@ Packet Layers:
 	ICMP
 		with: type, code, chksum, id, seq
 		
+All this layer attributes can be modified by just calling _.[<layer>].attribute 
+where _ is the current packet, <layer> is the specified layer, and attribute is 
+a layer value valid to that layer. 
+
+To build a packet:
+example to build an arp packet
+
+pkt = Ether()/ARP()
+pkt[ARP].hwsrc = "00:11:22:aa:bb:cc"
+pkt[ARP].pdst = "123.45.67.8"
+pkt[Ether].dst = "ff:ff:ff:ff:ff:ff"
+
