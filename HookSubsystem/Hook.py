@@ -1,6 +1,5 @@
 import os
 
-
 class Hook:
     __name: str
     __description: str
@@ -13,7 +12,7 @@ class Hook:
         self.__path = path
         self.__name = name
         self.__description = description
-        self.__status = False
+        self.__status = True
         self.__collection_association_number = 0
 
     # Returns a dictionary with the display information of the hook
@@ -23,6 +22,14 @@ class Hook:
     # Returns a string representing the absolute path of the hook
     def get_path(self):
         return self.__path
+
+    # Returns a string representing the name of the hook
+    def get_name(self):
+        return self.__name
+
+    # Returns a string representing the status of the hook
+    def get_status(self):
+        return self.__status
 
     # Sets the number of associations to a new number
     def set_collection_association_number(self, new_number: int):

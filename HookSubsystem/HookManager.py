@@ -1,4 +1,4 @@
-import runpy
+import importlib.util
 from HookCollectionSubsystem.HookCollectionManager import HookCollectionManager
 from HookSubsystem.Hook import Hook
 
@@ -20,5 +20,9 @@ class HookManager:
         self.__hook_list.append(hook_to_add)
 
     # Run a hook
-    def run_hook(self, hook: Hook):
-        runpy.run_path(hook.get_path())
+    @staticmethod
+    def run_hook(hook: Hook, parameter):
+        spec = importlib.util.spec_from_file_location(hook.get_name(), hook.get_path())
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.apply(parameter)

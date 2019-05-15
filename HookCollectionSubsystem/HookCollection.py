@@ -1,4 +1,5 @@
 from HookSubsystem.Hook import Hook
+from HookSubsystem.HookManager import HookManager
 
 
 class HookCollection:
@@ -14,7 +15,7 @@ class HookCollection:
         self.__name = name
         self.__description = description
         self.__execution_number = execution_number
-        self.__status = False
+        self.__status = True
         self.__num_hooks = 0
 
     # Getter for hook collection description
@@ -54,6 +55,13 @@ class HookCollection:
     def set_description(self, description: str):
         self.__description = description
 
+    # Toggles the status of the hook collection
+    def hook_collection_toggle(self):
+        if self.__status:
+            self.__status = False
+        else:
+            self.__status = True
+
     # Add hook to the hook collection
     def add_hook(self, hook: Hook):
         self.__hook_list.append(hook)
@@ -65,3 +73,11 @@ class HookCollection:
         self.__hook_list.remove(hook)
         self.__num_hooks -= 1
         hook.set_collection_association_number(hook.get_display_info()['num_collections'] - 1)
+
+    def run_collection(self, parameter):
+        parameter_mod = parameter
+        for hook in self.__hook_list:
+            if hook.get_status():
+                if parameter_mod:
+                    parameter_mod = HookManager.run_hook(hook, parameter_mod)
+        return parameter_mod
