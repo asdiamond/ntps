@@ -6,6 +6,8 @@ I am going to put this into python classes later.
 
 please run `pip install -r requirements.txt` using your virtualenv.
 
+The iptables scripts need to be run as `root`
+
 
 ## Virtualenv setup
 Your system needs to have virtualenv.

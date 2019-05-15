@@ -1,2 +1,2 @@
-pypacker
-pyqt5
+#pypacker
+#pyqt5
