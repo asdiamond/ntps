@@ -24,7 +24,11 @@ class Hook:
     def get_path(self):
         return self.__path
 
-    # Returns a string representing the absolute path of the hook
+    # Returns a string representing the name of the hook
+    def get_name(self):
+        return self.__name
+
+    # Returns a string representing the status of the hook
     def get_status(self):
         return self.__status
 

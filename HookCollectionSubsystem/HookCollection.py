@@ -74,7 +74,10 @@ class HookCollection:
         self.__num_hooks -= 1
         hook.set_collection_association_number(hook.get_display_info()['num_collections'] - 1)
 
-    def run_collection(self, hook_manager: HookManager):
+    def run_collection(self, parameter):
+        parameter_mod = parameter
         for hook in self.__hook_list:
             if hook.get_status():
-                hook_manager.run_hook(hook)
+                if parameter_mod:
+                    parameter_mod = HookManager.run_hook(hook, parameter_mod)
+        return parameter_mod
