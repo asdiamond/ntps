@@ -1,0 +1,6 @@
+# netfilterqueue does need to be installed, but trying to install it a second time isn't safe. 
+# So just install it once and then comment it out.
+pypacker
+#netfilterqueue 
+#scapy
+netfilterqueue
