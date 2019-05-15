@@ -1,6 +1,5 @@
 import os
 
-
 class Hook:
     __name: str
     __description: str
