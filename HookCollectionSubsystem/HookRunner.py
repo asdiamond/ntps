@@ -10,8 +10,7 @@ class HookRunner:
 
     def run(self):
         while True:
-            packet = intercepted.get()
-            modified_packet = self.__manager.run_hooks(packet)
+            packet_to_process = intercepted.get()
+            modified_packet = self.__manager.run_hooks(packet_to_process)
             if modified_packet:
-                self.__packet_collection.put(modified_packet)
-
+                #put into queue
