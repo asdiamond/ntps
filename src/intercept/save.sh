@@ -1,5 +1,7 @@
+#!/usr/bin/env bash
 
-iptables-save -f $1
+# may have an f option depending on kernel version
+iptables-save > "previous_configs/$1"
 
 echo "SAVED:"
-cat $1
+cat "previous_configs/$1"
