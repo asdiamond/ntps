@@ -74,7 +74,7 @@ class Ui_Dialog(QObject):
 
     @pyqtSlot( )
     def cancelPushButtonClicked( self ):
-        self.label.setText("savePushButtonClicked")
+        self.label.setText("cancelPushButtonClicked")
 
 
 if __name__ == "__main__":
