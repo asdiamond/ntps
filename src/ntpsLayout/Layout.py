@@ -17,7 +17,7 @@ from CreateEditHookCollectionOverlay import *
 from src.HookSubsystem.Hook import *
 from src.HookSubsystem.HookManager import *
 from src.HookCollectionSubsystem.HookCollectionManager import *
-
+from src.HookCollectionSubsystem.HookRunner import *
 
 class Ui_Form(QObject):
     def setupUi(self, Form):
@@ -32,7 +32,7 @@ class Ui_Form(QObject):
         self.livePacketDissectedListView = None
         self.livePacketBinaryListView = None
         self.livePacketHEXListView = None
-
+        self.livePacketManager = None
         Form.setObjectName("Form")
         Form.resize(1368, 707)
         self.gridLayout = QtWidgets.QGridLayout(Form)
@@ -860,7 +860,7 @@ class Ui_Form(QObject):
         self.label_3.setText(text)
 
 
-      from threading import Thread
+    from threading import Thread
     from src.integration_test import testq
     @pyqtSlot(int)
     def livePacketProxyBehaviorComboBoxIndexChanged(self, index):
@@ -882,11 +882,12 @@ class Ui_Form(QObject):
         # index 0 is off, 1 is on
         if index == 1:
             proxy = Thread(target=interceptor.interception)
+            hooker = HookRunner(manager=self.hookCollectionManager)
+            hooker.start()
             proxy.start()
+            
 
             # TODO Start the hookrunner
-
-
             if self.livePacketManager is None:
                 self.livePacketManager = LiveTrafficPacketFileManager()
                 self.livePacketDissectedListView.setModel(self.livePacketManager.dissectedModel)
@@ -899,6 +900,7 @@ class Ui_Form(QObject):
             #testq.turn_off()
             interceptor.turn_off()
         self.label_3.setText(str(index))
+
 
     @pyqtSlot(int)
     def livePacketDisplayFormatComboBoxIndexChanged( self, index ):
@@ -919,7 +921,6 @@ class Ui_Form(QObject):
     @pyqtSlot()
     def livePacketHEXListViewItemClicked( self ):
         self.label_3.setText("livePacketHEXListViewItemClicked")
-
 
     @pyqtSlot(int)
     def livePacketTabWidgetChanged( self, index ):

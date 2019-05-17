@@ -1,47 +1,11 @@
-
-from src.HookCollectionSubsystem.HookCollection import HookCollection
-from src.HookSubsystem import Hook
-
-
-class HookCollectionManager:
-    __hook_collection_list: list
-
-    def __init__(self):
-        self.__hook_collection_list = []
-        self.__num_collections = 0
-
-    # Update hook collection's execution seq number
-    def update_collection_seq_number(self, hook_collection: HookCollection, sequence_number: int):
-        hook_collection.set_execution_number(sequence_number)
-
-    # Update hook collection's name
-    def update_colllection_name(self, hook_collection: HookCollection, name: str):
-        hook_collection.set_name(name)
-
-    # Update hook collection's description
-    def update_collection_description(self, hook_collection: HookCollection, description: str):
-        hook_collection.set_description(description)
-
-    # Add a hook collection
-    def add_collection(self, name: str, description: str):
-        collection = HookCollection(name,description, self.__num_collections)
-        self.__hook_collection_list.append(collection)
-        self.__num_collections += 1
-        #TODO added for testing
-        return collection
-
-    # Delete a hook collection
-    def del_hook_collection(self, hook_collection: HookCollection):
-        for hook in hook_collection.get_list():
-            hook_collection.remove_hook(hook)
-        self.__hook_collection_list.remove(hook_collection)
-
-
 from src.HookSubsystem import Hook
 from src.HookCollectionSubsystem.HookCollection import *
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from scapy.all import *
 import binascii
+
+def exec_number(elem):
+        return elem.get_execution_number()
 
 class HookCollectionManager:
     hook_collection_list: list
@@ -90,7 +54,7 @@ class HookCollectionManager:
     # Run all enabled collections
     def run_hooks(self, parameter):
         modified_parameter = parameter
-        sortedCollection = self.hook_collection_list.sort(key = get_execution_number)
+        sortedCollection = self.hook_collection_list.sort(key = exec_number)
         for collection in sortedCollection:
             if collection.get_status():
                 modified_parameter = collection.run_collection(modified_parameter)
@@ -108,3 +72,5 @@ class HookCollectionManager:
             hookCollectionModel.appendRow(QtGui.QStandardItem(hcString))
         return hookCollectionModel
 
+
+   

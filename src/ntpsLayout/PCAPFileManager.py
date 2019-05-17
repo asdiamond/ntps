@@ -85,7 +85,8 @@ from threading import Thread
 from src.integration_test import testq
 
 from scapy.all import *
-
+from src.HookCollectionSubsystem import hookedq
+from src.intercept import intercepted
 
 class LiveTrafficPacketFileManager(PacketFileManager):
     def __init__(self, ):
@@ -100,7 +101,8 @@ class LiveTrafficPacketFileManager(PacketFileManager):
     def producer(self, ):
         from src.intercept import intercepted
         while True:
-            pkt = intercepted.get()
+            pkt = hookedq.get()
+            #pkt = intercepted.get()
             p = IP(pkt.get_payload())
             if pkt is -1:
                 print('got -1')
