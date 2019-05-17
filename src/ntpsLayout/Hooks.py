@@ -1,8 +1,7 @@
 import importlib.util
-from src.HookSubsystem.Hook import Hook
-from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from scapy.all import *
-import binascii
+from HookCollectionSubsystem.HookCollectionManager import HookCollectionManager
+from HookSubsystem.Hook import Hook
+
 
 class HookManager:
 
@@ -11,7 +10,7 @@ class HookManager:
         self.hookModel = None
 
     # Remove hook from every collection and then from the system
-    def remove_hook(self, hook: Hook, collection_manager):
+    def remove_hook(self, hook: Hook, collection_manager: HookCollectionManager):
         collection_manager.remove_hook_from_collections(hook)
         self.hooks.remove(hook)
         del hook
@@ -32,6 +31,11 @@ class HookManager:
 
     def createHookModel(self):
         hookModel = QtGui.QStandardItemModel()
-        for hook in self.hooks:
-            hookModel.appendRow(QtGui.QStandardItem(hook.get_name()))
+        for p in self.hooks:
+            hookModel.appendRow(QtGui.QStandardItem(str(raw(p))[2:-1]))
         return hookModel
+
+
+
+
+

@@ -10,12 +10,13 @@ class HookCollection:
     __num_hooks: int
 
     # Initializer
-    def __init__(self, name: str, description: str, execution_number: int):
+
+    def __init__(self, name: str, description: str, status: bool, execution_number: int):
         self.__hook_list = []
         self.__name = name
         self.__description = description
         self.__execution_number = execution_number
-        self.__status = True
+        self.__status = status
         self.__num_hooks = 0
 
     # Getter for hook collection description

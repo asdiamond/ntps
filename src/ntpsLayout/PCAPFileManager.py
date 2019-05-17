@@ -2,11 +2,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from scapy.all import *
 import binascii
 
+
 from scapy.layers.inet import IP
 
 from src.HookCollectionSubsystem import hookedq
-
-
 class PacketFileManager():
     def __init__(self):
         self.dissectedModel = self.createDissectedModel()
@@ -15,6 +14,7 @@ class PacketFileManager():
 
     def getFieldDict(self, packetIndex, layerName):
         return self.packets[packetIndex][layerName].fields
+
 
     def createDissectedModel(self):
         dissectedModel = QtGui.QStandardItemModel()
@@ -75,8 +75,10 @@ class PacketFileManager():
             item.setEditable(False)
             group_item.setChild(j, i + 1, item)
 
+
     def modifyPacket(self, index, layer, modifications):
         self.packets[index][layer].fields = modifications
+
 
 
 from threading import Thread
@@ -116,8 +118,10 @@ class LiveTrafficPacketFileManager(PacketFileManager):
         # self.HEXModel = self.createHEXModel()
 
 
+
 class PCAPFileManager(PacketFileManager):
     def __init__(self, filename):
         self.filename = filename
         self.packets = rdpcap(self.filename)
         super(PCAPFileManager, self).__init__()
+
