@@ -6,15 +6,18 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtCore import QObject, pyqtSlot
-from PacketFromPCAPModel import *
-from practiceWithModels import *
+from PCAPFileManager import *
 
 
 class Ui_Form(QObject):
     def setupUi(self, Form):
     # Create physical aspects of widgets
+        self.form = Form
+        self.PCAPDissectedModel = None
+        self.PCAPBinaryModel = None
+        self.PCAPHEXModel = None
         Form.setObjectName("Form")
         Form.resize(1368, 707)
         self.gridLayout = QtWidgets.QGridLayout(Form)
@@ -95,18 +98,23 @@ class Ui_Form(QObject):
         self.gridLayout_17.addWidget(self.label_24, 0, 0, 1, 1)
         self.livePacketProxyBehaviorComboBox = QtWidgets.QComboBox(self.tab_3)
         self.livePacketProxyBehaviorComboBox.setObjectName("livePacketProxyBehaviorComboBox")
+        self.livePacketProxyBehaviorComboBox.addItems(["Off", "On"])
         self.gridLayout_17.addWidget(self.livePacketProxyBehaviorComboBox, 0, 1, 1, 1)
         self.label_26 = QtWidgets.QLabel(self.tab_3)
         self.label_26.setObjectName("label_26")
         self.gridLayout_17.addWidget(self.label_26, 0, 2, 1, 1)
         self.livePacketInterceptionBehaviorComboBox = QtWidgets.QComboBox(self.tab_3)
         self.livePacketInterceptionBehaviorComboBox.setObjectName("livePacketInterceptionBehaviorComboBox")
+        self.livePacketInterceptionBehaviorComboBox.addItems(["Off", "On"])
+        self.livePacketInterceptionBehaviorComboBox.setEnabled(False)
+
         self.gridLayout_17.addWidget(self.livePacketInterceptionBehaviorComboBox, 0, 3, 1, 1)
         self.label_23 = QtWidgets.QLabel(self.tab_3)
         self.label_23.setObjectName("label_23")
         self.gridLayout_17.addWidget(self.label_23, 0, 4, 1, 1)
         self.livePacketQueueSizeLineEdit = QtWidgets.QLineEdit(self.tab_3)
         self.livePacketQueueSizeLineEdit.setObjectName("livePacketQueueSizeLineEdit")
+        self.livePacketQueueSizeLineEdit.setText('100')
         self.gridLayout_17.addWidget(self.livePacketQueueSizeLineEdit, 0, 5, 1, 1)
         self.groupBox_14 = QtWidgets.QGroupBox(self.tab_3)
         self.groupBox_14.setObjectName("groupBox_14")
@@ -286,18 +294,21 @@ class Ui_Form(QObject):
         self.gridLayout_12.addWidget(self.label_6, 0, 0, 1, 1)
         self.packetFromPCAPProxyBehaviorComboBox = QtWidgets.QComboBox(self.tab_4)
         self.packetFromPCAPProxyBehaviorComboBox.setObjectName("packetFromPCAPProxyBehaviorComboBox")
+        self.packetFromPCAPProxyBehaviorComboBox.addItems(["Off", "On"])
         self.gridLayout_12.addWidget(self.packetFromPCAPProxyBehaviorComboBox, 0, 1, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.tab_4)
         self.label_4.setObjectName("label_4")
         self.gridLayout_12.addWidget(self.label_4, 0, 2, 1, 1)
         self.packetFromPCAPInterceptionBehaviorComboBox = QtWidgets.QComboBox(self.tab_4)
         self.packetFromPCAPInterceptionBehaviorComboBox.setObjectName("packetFromPCAPInterceptionBehaviorComboBox")
+        self.packetFromPCAPInterceptionBehaviorComboBox.addItems(["Off", "On"])
         self.gridLayout_12.addWidget(self.packetFromPCAPInterceptionBehaviorComboBox, 0, 3, 1, 1)
         self.label_5 = QtWidgets.QLabel(self.tab_4)
         self.label_5.setObjectName("label_5")
         self.gridLayout_12.addWidget(self.label_5, 0, 4, 1, 1)
         self.packetFromPCAPQueueSizeLineEdit = QtWidgets.QLineEdit(self.tab_4)
         self.packetFromPCAPQueueSizeLineEdit.setObjectName("packetFromPCAPQueueSizeLineEdit")
+        self.packetFromPCAPQueueSizeLineEdit.setText('100')
         self.gridLayout_12.addWidget(self.packetFromPCAPQueueSizeLineEdit, 0, 5, 1, 1)
         self.groupBox_9 = QtWidgets.QGroupBox(self.tab_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
@@ -350,10 +361,9 @@ class Ui_Form(QObject):
         self.tab_14.setObjectName("tab_14")
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.tab_14)
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
-        # self.packetFromPCAPDissectedTreeView = QtWidgets.QTreeView(self.tab_14)
-        # self.packetFromPCAPDissectedTreeView.setObjectName("packetFromPCAPDissectedTreeView")
-
-        # self.horizontalLayout_11.addWidget(self.packetFromPCAPDissectedTreeView)
+        self.packetFromPCAPDissectedTreeView = QtWidgets.QTreeView(self.tab_14)
+        self.packetFromPCAPDissectedTreeView.setObjectName("packetFromPCAPDissectedTreeView")
+        self.horizontalLayout_11.addWidget(self.packetFromPCAPDissectedTreeView)
         self.packetFromPCAPTabWidget.addTab(self.tab_14, "")
         self.tab_15 = QtWidgets.QWidget()
         self.tab_15.setObjectName("tab_15")
@@ -378,7 +388,14 @@ class Ui_Form(QObject):
         self.packetFromPCAPClearPacketAreaPushButton.setObjectName("packetFromPCAPClearPacketAreaPushButton")
         self.gridLayout_2.addWidget(self.packetFromPCAPClearPacketAreaPushButton, 0, 2, 1, 1)
         self.gridLayout_12.addWidget(self.groupBox_2, 3, 0, 1, 6)
+        
+
         self.groupBox_3 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_3.setMaximumHeight(1000)
+
+
+
+
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -404,26 +421,58 @@ class Ui_Form(QObject):
         self.maskLabel_2.setObjectName("maskLabel_2")
         self.verticalLayout_7.addWidget(self.maskLabel_2)
         self.gridLayout_6.addWidget(self.groupBox_10, 0, 2, 1, 1)
-        self.groupBox_11 = QtWidgets.QGroupBox(self.groupBox_3)
-        self.groupBox_11.setObjectName("groupBox_11")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.groupBox_11)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.packetFromPCAPValueLineEdit = QtWidgets.QLineEdit(self.groupBox_11)
-        self.packetFromPCAPValueLineEdit.setObjectName("packetFromPCAPValueLineEdit")
-        self.verticalLayout_8.addWidget(self.packetFromPCAPValueLineEdit)
-        self.gridLayout_6.addWidget(self.groupBox_11, 0, 1, 1, 1)
-        self.groupBox_12 = QtWidgets.QGroupBox(self.groupBox_3)
-        self.groupBox_12.setObjectName("groupBox_12")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.groupBox_12)
-        self.gridLayout_9.setObjectName("gridLayout_9")
-        self.packetFromPCAPFieldCheckBox = QtWidgets.QCheckBox(self.groupBox_12)
-        self.packetFromPCAPFieldCheckBox.setText("")
-        self.packetFromPCAPFieldCheckBox.setObjectName("packetFromPCAPFieldCheckBox")
-        self.gridLayout_9.addWidget(self.packetFromPCAPFieldCheckBox, 0, 0, 1, 1)
-        self.packetFromPCAPFieldLineEdit = QtWidgets.QLineEdit(self.groupBox_12)
-        self.packetFromPCAPFieldLineEdit.setObjectName("packetFromPCAPFieldLineEdit")
-        self.gridLayout_9.addWidget(self.packetFromPCAPFieldLineEdit, 0, 1, 1, 1)
-        self.gridLayout_6.addWidget(self.groupBox_12, 0, 0, 1, 1)
+
+
+
+
+
+
+
+        self.PCAPValueGroupBox = QtWidgets.QGroupBox(self.groupBox_3)
+        self.PCAPValueGridLayout = QtWidgets.QGridLayout()
+        self.PCAPValueGroupBox.setLayout(self.PCAPValueGridLayout)
+
+        self.PCAPValueScrollArea = QtWidgets.QScrollArea()
+        self.PCAPValueScrollArea.setWidgetResizable(True)
+        self.PCAPValueScrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        # self.PCAPValueScrollAreaGridLayout = QtWidgets.QGridLayout()
+        # self.PCAPValueScrollArea.setLayout(self.PCAPValueScrollAreaGridLayout)
+
+        self.PCAPValueGridLayout.addWidget(self.PCAPValueScrollArea)
+
+        self.PCAPValueWidget = QtWidgets.QWidget()
+        self.PCAPValueWidgetVerticalLayout = QtWidgets.QVBoxLayout()
+        self.PCAPValueWidget.setLayout(self.PCAPValueWidgetVerticalLayout)
+
+        self.PCAPValueScrollArea.setWidget(self.PCAPValueWidget)
+
+
+
+        #SECTION: PCAP Group box Field Names
+
+
+        self.gridLayout_6.addWidget(self.PCAPValueGroupBox, 0, 1, 1, 1)
+        self.PCAPFieldNamesGroupBox = QtWidgets.QGroupBox(self.groupBox_3)
+        self.PCAPFieldNamesGroupBox.setObjectName("PCAPFieldNamesGroupBox")
+        self.PCAPFieldNamesGridLayout = QtWidgets.QGridLayout()
+        self.PCAPFieldNamesGroupBox.setLayout(self.PCAPFieldNamesGridLayout)
+
+        self.PCAPFieldNamesScrollArea = QtWidgets.QScrollArea()
+        self.PCAPFieldNamesScrollArea.setWidgetResizable(True)
+        self.PCAPFieldNamesScrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        # self.PCAPFieldNamesScrollAreaGridLayout = QtWidgets.QGridLayout()
+        # self.PCAPFieldNamesScrollArea.setLayout(self.PCAPFieldNamesScrollAreaGridLayout)
+
+        self.PCAPFieldNamesGridLayout.addWidget(self.PCAPFieldNamesScrollArea)
+
+        self.PCAPFieldNamesWidget = QtWidgets.QWidget()
+        self.PCAPFieldNamesWidgetGridLayout = QtWidgets.QGridLayout()
+        self.PCAPFieldNamesWidget.setLayout(self.PCAPFieldNamesWidgetGridLayout)
+
+        self.PCAPFieldNamesScrollArea.setWidget(self.PCAPFieldNamesWidget)
+
+
+        self.gridLayout_6.addWidget(self.PCAPFieldNamesGroupBox, 0, 0, 1, 1)
         self.packetFromPCAPDropPushButton = QtWidgets.QPushButton(self.groupBox_3)
         self.packetFromPCAPDropPushButton.setObjectName("packetFromPCAPDropPushButton")
         self.gridLayout_6.addWidget(self.packetFromPCAPDropPushButton, 1, 4, 1, 1)
@@ -589,142 +638,25 @@ class Ui_Form(QObject):
         self.packetFromPCAPStopFuzzingPushButton.clicked.connect(self.packetFromPCAPStopFuzzingPushButtonClicked)
         self.packetFromPCAPFuzzPushButton.clicked.connect(self.packetFromPCAPFuzzPushButtonClicked)
 
-        self.packetFromPCAPValueLineEdit.textEdited.connect(self.packetFromPCAPValueLineEdited)
+        self.packetFromPCAPFileLineEdit.textEdited.connect(self.packetFromPCAPFileLineEdited)
         self.packetFromPCAPMinimumLineEdit.textEdited.connect(self.packetFromPCAPMinimumLineEdited)
         self.packetFromPCAPMaximumLineEdit.textEdited.connect(self.packetFromPCAPMaximumLineEdited)
         self.packetFromPCAPExpectedReturnTypeLineEdit.textEdited.connect(self.packetFromPCAPExpectedReturnTypeLineEdited)
         self.packetFromPCAPSelectedFieldNameLineEdit.textEdited.connect(self.packetFromPCAPSelectedFieldNameLineEdited)
         self.packetFromPCAPSelectedPacketNameLineEdit.textEdited.connect(self.packetFromPCAPSelectedPacketNameLineEdited)
         self.packetFromPCAPQueueSizeLineEdit.textEdited.connect(self.packetFromPCAPQueueSizeLineEdited)
-        self.packetFromPCAPFileLineEdit.textEdited.connect(self.packetFromPCAPFileLineEdited)
         self.packetFromPCAPCaptureFilterLineEdit.textEdited.connect(self.packetFromPCAPCaptureFilterLineEdited)
-        self.packetFromPCAPFieldLineEdit.textEdited.connect(self.packetFromPCAPFieldLineEdited)
 
         self.packetFromPCAPProxyBehaviorComboBox.currentIndexChanged.connect(self.packetFromPCAPProxyBehaviorComboBoxIndexChanged)
         self.packetFromPCAPInterceptionBehaviorComboBox.currentIndexChanged.connect(self.packetFromPCAPInterceptionBehaviorComboBoxIndexChanged)
         self.packetFromPCAPDisplayFormatComboBox.currentIndexChanged.connect(self.packetFromPCAPDisplayFormatComboBoxIndexChanged)
-
-        self.packetFromPCAPFieldCheckBox.stateChanged.connect(self.packetFromPCAPFieldCheckBoxStateChanged)
-
         self.packetFromPCAPTabWidget.currentChanged.connect(self.packetFromPCAPTabWidgetChanged)
-        
-        # self.packetFromPCAPDissectedListView
-
-        self.PCAPDissectedModel = GroupModel(self)
-        self.packetFromPCAPDissectedTreeView = GroupView(self.PCAPDissectedModel, parent=self.tab_14)
-        self.packetFromPCAPDissectedTreeView.setObjectName("packetFromPCAPDissectedTreeView")
-        self.horizontalLayout_11.addWidget(self.packetFromPCAPDissectedTreeView)
-        # self.packetFromPCAPBinaryListView
-        # self.packetFromPCAPHEXListView
-
-
-
-
-
-
 
         self.retranslateUi(Form)
         self.contentViewTabWidget.setCurrentIndex(3)
         self.livePacketTabWidget.setCurrentIndex(0)
         self.packetFromPCAPTabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_2.setText(_translate("Form", "Content View"))
-        self.label.setText(_translate("Form", "Option View"))
-        self.label_3.setText(_translate("Form", "Network Traffic Proxy System"))
-        self.groupBox_23.setTitle(_translate("Form", "Hook Properties"))
-        self.hookDeletePushButton.setText(_translate("Form", "Delete"))
-        self.label_33.setText(_translate("Form", "Search"))
-        self.hookEditPushButton.setText(_translate("Form", "Edit"))
-        self.hookAddPushButton.setText(_translate("Form", "+Hook"))
-        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab), _translate("Form", "Hook"))
-        self.groupBox_24.setTitle(_translate("Form", "Hook Collection Properties"))
-        self.label_34.setText(_translate("Form", "Search"))
-        self.hookCollectionEditPushButton.setText(_translate("Form", "Edit"))
-        self.hookCollectionDeletePushButton.setText(_translate("Form", "Delete"))
-        self.hookCollectionAddPushButton.setText(_translate("Form", "+Hook Collection"))
-        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_2), _translate("Form", "Hook Collection"))
-        self.label_24.setText(_translate("Form", "Proxy Behavior"))
-        self.label_26.setText(_translate("Form", "Interception Behavior"))
-        self.label_23.setText(_translate("Form", "Queue Size"))
-        self.groupBox_14.setTitle(_translate("Form", "Capture Filter"))
-        self.label_25.setText(_translate("Form", "FIlter"))
-        self.livePacketClearFilterPushButton.setText(_translate("Form", "Clear"))
-        self.livePacketApplyFilterPushButton.setText(_translate("Form", "Apply"))
-        self.groupBox_15.setTitle(_translate("Form", "Packet Area"))
-        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_11), _translate("Form", "Dissected"))
-        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_12), _translate("Form", "Binary"))
-        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_13), _translate("Form", "HEX"))
-        self.livePacketClearAreaPushButton.setText(_translate("Form", "Clear"))
-        self.groupBox_17.setTitle(_translate("Form", "Field Area"))
-        self.livePacketForwardPushButton.setText(_translate("Form", "Forward"))
-        self.label_32.setText(_translate("Form", "Field Name, value, and display format are editable fields"))
-        self.livePacketSaveModificationPushButton.setText(_translate("Form", "Save Modification"))
-        self.groupBox_18.setTitle(_translate("Form", "Mask"))
-        self.maskLabel_3.setText(_translate("Form", "0"))
-        self.groupBox_19.setTitle(_translate("Form", "Value"))
-        self.livePacketValueLineEdit.setText(_translate("Form", "08"))
-        self.groupBox_20.setTitle(_translate("Form", "FieldName"))
-        self.livePacketFieldLineEdit.setText(_translate("Form", "icmp.type"))
-        self.livePacketDropPacketPushButton.setText(_translate("Form", "Drop"))
-        self.groupBox_21.setTitle(_translate("Form", "Display Format"))
-        self.livePacketAddFieldPushButton.setText(_translate("Form", "+"))
-        self.livePacketRemoveFieldPushButton.setText(_translate("Form", "-"))
-        self.groupBox_16.setTitle(_translate("Form", "Fuzzing Area"))
-        self.label_27.setText(_translate("Form", "Expected Return Type"))
-        self.label_28.setText(_translate("Form", "Selected Packet Name"))
-        self.label_29.setText(_translate("Form", "Selected Field Name"))
-        self.label_30.setText(_translate("Form", "Maximum"))
-        self.label_31.setText(_translate("Form", "Minimum"))
-        self.livePacketStopFuzzingPushButton.setText(_translate("Form", "Stop"))
-        self.livePacketFuzzPushButton.setText(_translate("Form", "Fuzz"))
-        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_3), _translate("Form", "Live Packet"))
-        self.label_6.setText(_translate("Form", "Proxy Behavior"))
-        self.label_4.setText(_translate("Form", "Interception Behavior"))
-        self.label_5.setText(_translate("Form", "Queue Size"))
-        self.groupBox_9.setTitle(_translate("Form", "PCAP File"))
-        self.label_14.setText(_translate("Form", "PCAP File"))
-        self.packetFromPCAPOpenFilePushButton.setText(_translate("Form", "Open"))
-        self.packetFromPCAPCancelFilePushButton.setText(_translate("Form", "Cancel"))
-        self.groupBox.setTitle(_translate("Form", "Capture Filter"))
-        self.label_22.setText(_translate("Form", "FIlter"))
-        self.packetFromPCAPApplyCaptureFilterPushButton.setText(_translate("Form", "Apply"))
-        self.packetFromPCAPClearCaptureFilterPushButton.setText(_translate("Form", "Clear"))
-        self.groupBox_2.setTitle(_translate("Form", "Packet Area"))
-        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_14), _translate("Form", "Dissected"))
-        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_15), _translate("Form", "Binary"))
-        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_16), _translate("Form", "HEX"))
-        self.packetFromPCAPClearPacketAreaPushButton.setText(_translate("Form", "Clear"))
-        self.groupBox_3.setTitle(_translate("Form", "Field Area"))
-        self.packetFromPCAPForwardPushButton.setText(_translate("Form", "Forward"))
-        self.label_21.setText(_translate("Form", "Field Name, value, and display format are editable fields"))
-        self.packetFromPCAPSaveModificationPushButton.setText(_translate("Form", "Save Modification"))
-        self.groupBox_10.setTitle(_translate("Form", "Mask"))
-        self.maskLabel_2.setText(_translate("Form", "0"))
-        self.groupBox_11.setTitle(_translate("Form", "Value"))
-        self.packetFromPCAPValueLineEdit.setText(_translate("Form", "08"))
-        self.groupBox_12.setTitle(_translate("Form", "FieldName"))
-        self.packetFromPCAPFieldLineEdit.setText(_translate("Form", "icmp.type"))
-        self.packetFromPCAPDropPushButton.setText(_translate("Form", "Drop"))
-        self.groupBox_13.setTitle(_translate("Form", "Display Format"))
-        self.packetFromPCAPAddPushButton.setText(_translate("Form", "+"))
-        self.packetFromPCAPRemovePushButton.setText(_translate("Form", "-"))
-        self.groupBox_4.setTitle(_translate("Form", "Fuzzing Area"))
-        self.label_15.setText(_translate("Form", "Expected Return Type"))
-        self.label_16.setText(_translate("Form", "Selected Packet Name"))
-        self.label_17.setText(_translate("Form", "Selected Field Name"))
-        self.label_18.setText(_translate("Form", "Maximum"))
-        self.label_19.setText(_translate("Form", "Minimum"))
-        self.packetFromPCAPStopFuzzingPushButton.setText(_translate("Form", "Stop"))
-        self.packetFromPCAPFuzzPushButton.setText(_translate("Form", "Fuzz"))
-        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_4), _translate("Form", "Packet From PCAP"))
-        self.hookPushButton.setText(_translate("Form", "Hook"))
-        self.hookCollectionPushButton.setText(_translate("Form", "Hook Collection"))
-        self.livePacketPushButton.setText(_translate("Form", "Live Packet"))
-        self.packetFromPCAPPushButton.setText(_translate("Form", "Packet from PCAP"))
 
 #Option View Buttons - used to switch between tabs
 
@@ -889,6 +821,11 @@ class Ui_Form(QObject):
 
     @pyqtSlot(int)
     def livePacketProxyBehaviorComboBoxIndexChanged( self, index ):
+        if (index == 0):
+            self.livePacketInterceptionBehaviorComboBox.setCurrentIndex(0)
+            self.livePacketInterceptionBehaviorComboBox.setEnabled(False)
+        if(index == 1):
+            self.livePacketInterceptionBehaviorComboBox.setEnabled(True)
         self.label_3.setText(str(index))
 
     @pyqtSlot(int)
@@ -935,7 +872,48 @@ class Ui_Form(QObject):
 
     @pyqtSlot( )
     def packetFromPCAPOpenFilePushButtonClicked( self ):
-        self.label_3.setText("packetFromPCAPOpenFilePushButtonClicked")
+    	fname = self.packetFromPCAPFileLineEdit.text()
+    	self.PCAPFileManager = PCAPFileManager(fname)
+
+    	self.packetFromPCAPDissectedTreeView.setModel(self.PCAPFileManager.dissectedModel)
+    	self.packetFromPCAPDissectedTreeView.clicked.connect(self.layerSelected)
+
+    	self.packetFromPCAPBinaryListView.setModel(self.PCAPFileManager.binaryModel)
+    	
+    	self.packetFromPCAPHEXListView.setModel(self.PCAPFileManager.HEXModel)
+
+    	self.label_3.setText("packetFromPCAPOpenFilePushButtonClicked")
+
+    @pyqtSlot(QtCore.QModelIndex)
+    def layerSelected(self, modelIndex):
+    	#clear current field name widgets
+        for i in reversed(range(self.PCAPFieldNamesWidgetGridLayout.count())): 
+            self.PCAPFieldNamesWidgetGridLayout.itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.PCAPValueWidgetVerticalLayout.count())): 
+            self.PCAPValueWidgetVerticalLayout.itemAt(i).widget().setParent(None)
+
+        self.PCAPFieldToValueLineEditDict = {}
+        self.PCAPFieldToFieldLineEditDict = {}
+        layerName = str(modelIndex.data())
+        if 'Frame ' in layerName:
+            return
+        packetIndex = modelIndex.parent().row()
+        fieldDict = self.PCAPFileManager.getFieldDict(packetIndex, layerName)
+        i = 0
+        for field, value in fieldDict.items():
+            self.packetFromPCAPFieldCheckBox = QtWidgets.QCheckBox(self.PCAPFieldNamesWidget)
+            self.PCAPFieldNamesWidgetGridLayout.addWidget(self.packetFromPCAPFieldCheckBox, i, 0, 1, 1)
+            self.packetFromPCAPFieldLineEdit = QtWidgets.QLineEdit(self.PCAPFieldNamesWidget)
+            self.packetFromPCAPFieldLineEdit.setText(field)
+            self.PCAPFieldNamesWidgetGridLayout.addWidget(self.packetFromPCAPFieldLineEdit, i, 1, 1, 1)
+
+            self.packetFromPCAPValueLineEdit = QtWidgets.QLineEdit(self.PCAPValueWidget)
+            self.packetFromPCAPValueLineEdit.setText(str(value))
+            self.PCAPValueWidgetVerticalLayout.addWidget(self.packetFromPCAPValueLineEdit)
+            self.PCAPFieldToValueLineEditDict[field] = self.packetFromPCAPValueLineEdit
+            self.PCAPFieldToFieldLineEditDict[field] = self.packetFromPCAPFieldLineEdit
+            i+=1
+
 
 
     @pyqtSlot( )
@@ -955,6 +933,22 @@ class Ui_Form(QObject):
 
     @pyqtSlot( )
     def packetFromPCAPSaveModificationPushButtonClicked( self ):
+        self.packetFromPCAPFieldLineEdit
+        self.packetFromPCAPValueLineEdit
+        modelIndex = self.packetFromPCAPDissectedTreeView.currentIndex()
+        layerName = str(modelIndex.data())
+        if 'Frame ' in layerName:
+            return
+        packetIndex = modelIndex.parent().row()
+        fieldDict = self.PCAPFileManager.getFieldDict(packetIndex, layerName)
+        modifications = {}
+        for field, value in fieldDict.items():
+            newValue = self.PCAPFieldToValueLineEditDict[field].text()
+            if newValue is str(value):
+                modifications[field] = value
+            else:
+                modifications[field] = newValue
+        self.PCAPFileManager.modifyPacket(packetIndex, layerName, modifications)
         self.label_3.setText("packetFromPCAPSaveModificationPushButtonClicked")
 
 
@@ -982,10 +976,6 @@ class Ui_Form(QObject):
     def packetFromPCAPFuzzPushButtonClicked( self ):
         self.label_3.setText("packetFromPCAPFuzzPushButtonClicked")
 
-
-    @pyqtSlot(str)
-    def packetFromPCAPValueLineEdited( self, text ):
-        self.label_3.setText(text)
 
     @pyqtSlot(str)
     def packetFromPCAPMinimumLineEdited( self, text ):
@@ -1018,11 +1008,6 @@ class Ui_Form(QObject):
     @pyqtSlot(str)
     def packetFromPCAPCaptureFilterLineEdited( self, text ):
         self.label_3.setText(text)
-
-    @pyqtSlot(str)
-    def packetFromPCAPFieldLineEdited( self, text ):
-        self.label_3.setText(text)
-
 
 
     @pyqtSlot(int)
@@ -1061,7 +1046,100 @@ class Ui_Form(QObject):
         self.label_3.setText(str(index))
 
 
-
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label_2.setText(_translate("Form", "Content View"))
+        self.label.setText(_translate("Form", "Option View"))
+        self.label_3.setText(_translate("Form", "Network Traffic Proxy System"))
+        self.groupBox_23.setTitle(_translate("Form", "Hook Properties"))
+        self.hookDeletePushButton.setText(_translate("Form", "Delete"))
+        self.label_33.setText(_translate("Form", "Search"))
+        self.hookEditPushButton.setText(_translate("Form", "Edit"))
+        self.hookAddPushButton.setText(_translate("Form", "+Hook"))
+        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab), _translate("Form", "Hook"))
+        self.groupBox_24.setTitle(_translate("Form", "Hook Collection Properties"))
+        self.label_34.setText(_translate("Form", "Search"))
+        self.hookCollectionEditPushButton.setText(_translate("Form", "Edit"))
+        self.hookCollectionDeletePushButton.setText(_translate("Form", "Delete"))
+        self.hookCollectionAddPushButton.setText(_translate("Form", "+Hook Collection"))
+        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_2), _translate("Form", "Hook Collection"))
+        self.label_24.setText(_translate("Form", "Proxy Behavior"))
+        self.label_26.setText(_translate("Form", "Interception Behavior"))
+        self.label_23.setText(_translate("Form", "Queue Size"))
+        self.groupBox_14.setTitle(_translate("Form", "Capture Filter"))
+        self.label_25.setText(_translate("Form", "FIlter"))
+        self.livePacketClearFilterPushButton.setText(_translate("Form", "Clear"))
+        self.livePacketApplyFilterPushButton.setText(_translate("Form", "Apply"))
+        self.groupBox_15.setTitle(_translate("Form", "Packet Area"))
+        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_11), _translate("Form", "Dissected"))
+        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_12), _translate("Form", "Binary"))
+        self.livePacketTabWidget.setTabText(self.livePacketTabWidget.indexOf(self.tab_13), _translate("Form", "HEX"))
+        self.livePacketClearAreaPushButton.setText(_translate("Form", "Clear"))
+        self.groupBox_17.setTitle(_translate("Form", "Field Area"))
+        self.livePacketForwardPushButton.setText(_translate("Form", "Forward"))
+        self.label_32.setText(_translate("Form", "Field Name, value, and display format are editable fields"))
+        self.livePacketSaveModificationPushButton.setText(_translate("Form", "Save Modification"))
+        self.groupBox_18.setTitle(_translate("Form", "Mask"))
+        self.maskLabel_3.setText(_translate("Form", "0"))
+        self.groupBox_19.setTitle(_translate("Form", "Value"))
+        self.livePacketValueLineEdit.setText(_translate("Form", "08"))
+        self.groupBox_20.setTitle(_translate("Form", "FieldName"))
+        self.livePacketFieldLineEdit.setText(_translate("Form", "icmp.type"))
+        self.livePacketDropPacketPushButton.setText(_translate("Form", "Drop"))
+        self.groupBox_21.setTitle(_translate("Form", "Display Format"))
+        self.livePacketAddFieldPushButton.setText(_translate("Form", "+"))
+        self.livePacketRemoveFieldPushButton.setText(_translate("Form", "-"))
+        self.groupBox_16.setTitle(_translate("Form", "Fuzzing Area"))
+        self.label_27.setText(_translate("Form", "Expected Return Type"))
+        self.label_28.setText(_translate("Form", "Selected Packet Name"))
+        self.label_29.setText(_translate("Form", "Selected Field Name"))
+        self.label_30.setText(_translate("Form", "Maximum"))
+        self.label_31.setText(_translate("Form", "Minimum"))
+        self.livePacketStopFuzzingPushButton.setText(_translate("Form", "Stop"))
+        self.livePacketFuzzPushButton.setText(_translate("Form", "Fuzz"))
+        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_3), _translate("Form", "Live Packet"))
+        self.label_6.setText(_translate("Form", "Proxy Behavior"))
+        self.label_4.setText(_translate("Form", "Interception Behavior"))
+        self.label_5.setText(_translate("Form", "Queue Size"))
+        self.groupBox_9.setTitle(_translate("Form", "PCAP File"))
+        self.label_14.setText(_translate("Form", "PCAP File"))
+        self.packetFromPCAPOpenFilePushButton.setText(_translate("Form", "Open"))
+        self.packetFromPCAPCancelFilePushButton.setText(_translate("Form", "Cancel"))
+        self.groupBox.setTitle(_translate("Form", "Capture Filter"))
+        self.label_22.setText(_translate("Form", "FIlter"))
+        self.packetFromPCAPApplyCaptureFilterPushButton.setText(_translate("Form", "Apply"))
+        self.packetFromPCAPClearCaptureFilterPushButton.setText(_translate("Form", "Clear"))
+        self.groupBox_2.setTitle(_translate("Form", "Packet Area"))
+        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_14), _translate("Form", "Dissected"))
+        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_15), _translate("Form", "Binary"))
+        self.packetFromPCAPTabWidget.setTabText(self.packetFromPCAPTabWidget.indexOf(self.tab_16), _translate("Form", "HEX"))
+        self.packetFromPCAPClearPacketAreaPushButton.setText(_translate("Form", "Clear"))
+        self.groupBox_3.setTitle(_translate("Form", "Field Area"))
+        self.packetFromPCAPForwardPushButton.setText(_translate("Form", "Forward"))
+        self.label_21.setText(_translate("Form", "Field Name, value, and display format are editable fields"))
+        self.packetFromPCAPSaveModificationPushButton.setText(_translate("Form", "Save Modification"))
+        self.groupBox_10.setTitle(_translate("Form", "Mask"))
+        self.maskLabel_2.setText(_translate("Form", "0"))
+        self.PCAPValueGroupBox.setTitle(_translate("Form", "Value"))
+        self.PCAPFieldNamesGroupBox.setTitle(_translate("Form", "FieldName"))
+        self.packetFromPCAPDropPushButton.setText(_translate("Form", "Drop"))
+        self.groupBox_13.setTitle(_translate("Form", "Display Format"))
+        self.packetFromPCAPAddPushButton.setText(_translate("Form", "+"))
+        self.packetFromPCAPRemovePushButton.setText(_translate("Form", "-"))
+        self.groupBox_4.setTitle(_translate("Form", "Fuzzing Area"))
+        self.label_15.setText(_translate("Form", "Expected Return Type"))
+        self.label_16.setText(_translate("Form", "Selected Packet Name"))
+        self.label_17.setText(_translate("Form", "Selected Field Name"))
+        self.label_18.setText(_translate("Form", "Maximum"))
+        self.label_19.setText(_translate("Form", "Minimum"))
+        self.packetFromPCAPStopFuzzingPushButton.setText(_translate("Form", "Stop"))
+        self.packetFromPCAPFuzzPushButton.setText(_translate("Form", "Fuzz"))
+        self.contentViewTabWidget.setTabText(self.contentViewTabWidget.indexOf(self.tab_4), _translate("Form", "Packet From PCAP"))
+        self.hookPushButton.setText(_translate("Form", "Hook"))
+        self.hookCollectionPushButton.setText(_translate("Form", "Hook Collection"))
+        self.livePacketPushButton.setText(_translate("Form", "Live Packet"))
+        self.packetFromPCAPPushButton.setText(_translate("Form", "Packet from PCAP"))
 
 if __name__ == "__main__":
     import sys
