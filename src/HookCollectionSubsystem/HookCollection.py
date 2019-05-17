@@ -1,5 +1,5 @@
-from HookSubsystem.Hook import Hook
-from HookSubsystem.HookManager import HookManager
+from src.HookSubsystem.Hook import Hook
+from src.HookSubsystem.HookManager import HookManager
 
 
 class HookCollection:

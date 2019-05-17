@@ -1,5 +1,5 @@
-from HookCollectionSubsystem.HookCollection import HookCollection
-from HookSubsystem import Hook
+from src.HookCollectionSubsystem.HookCollection import HookCollection
+from src.HookSubsystem import Hook
 
 
 class HookCollectionManager:
@@ -26,6 +26,8 @@ class HookCollectionManager:
         collection = HookCollection(name,description, self.__num_collections)
         self.__hook_collection_list.append(collection)
         self.__num_collections += 1
+        #TODO added for testing
+        return collection
 
     # Delete a hook collection
     def del_hook_collection(self, hook_collection: HookCollection):

@@ -1,13 +1,14 @@
-from netfilterqueue import NetfilterQueue
+# from netfilterqueue import NetfilterQueue
 import subprocess
 
 # the function to put intercepted packets on the blocking queue
-from intercepted import put
+# from intercepted import put
+from src.intercept import intercepted
 
 
 def produce(pkt):
     print(pkt)
-    put(pkt)
+    intercepted.put(pkt)
 
 
 def start_interception():
@@ -31,4 +32,4 @@ def start_interception():
         print('Goodbye!')
 
 
-start_interception()
+

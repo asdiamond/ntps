@@ -14,8 +14,8 @@ def get():
     return pkt
 
 
+pc = []
 # for the interceptor to call
 # will block thread if the queue is full
 def put(packet):
-    if packet:
-        q.put(packet)
+    q.put(packet)

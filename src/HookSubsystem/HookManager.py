@@ -1,6 +1,6 @@
 import importlib.util
-from HookCollectionSubsystem.HookCollectionManager import HookCollectionManager
-from HookSubsystem.Hook import Hook
+from src.HookCollectionSubsystem import HookCollectionManager
+from src.HookSubsystem.Hook import Hook
 
 
 class HookManager:
@@ -18,6 +18,8 @@ class HookManager:
     def add_hook(self, path: str, name: str, description: str):
         hook_to_add = Hook(path, name, description)
         self.__hook_list.append(hook_to_add)
+        # TODO added for testing
+        return hook_to_add
 
     # Run a hook
     @staticmethod

@@ -2,6 +2,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from scapy.all import *
 import binascii
 
+from scapy.layers.inet import IP
+
+from src.HookCollectionSubsystem import hookedq
+
+
 class PacketFileManager():
     def __init__(self):
         self.dissectedModel = self.createDissectedModel()
@@ -10,7 +15,6 @@ class PacketFileManager():
 
     def getFieldDict(self, packetIndex, layerName):
         return self.packets[packetIndex][layerName].fields
-
 
     def createDissectedModel(self):
         dissectedModel = QtGui.QStandardItemModel()
@@ -24,7 +28,7 @@ class PacketFileManager():
                 layers.append(layer)
 
             displayPackets['Frame ' + str(i) + ': ' + p.summary()] = layers
-            i+=1
+            i += 1
         for group, layers in displayPackets.items():
             group_item = self.add_group(dissectedModel, group)
             for layer in layers:
@@ -40,7 +44,7 @@ class PacketFileManager():
     def createHEXModel(self):
         HEXModel = QtGui.QStandardItemModel()
         for p in self.packets:
-            x = b" ".join(re.findall(b'..',binascii.hexlify(raw(p))))
+            x = b" ".join(re.findall(b'..', binascii.hexlify(raw(p))))
             HEXModel.appendRow(QtGui.QStandardItem(str(x)[2:-1]))
         return HEXModel
 
@@ -69,37 +73,49 @@ class PacketFileManager():
         for i, text in enumerate(texts):
             item = QtGui.QStandardItem(text)
             item.setEditable(False)
-            group_item.setChild(j, i+1, item)
+            group_item.setChild(j, i + 1, item)
 
     def modifyPacket(self, index, layer, modifications):
         self.packets[index][layer].fields = modifications
 
 
+from threading import Thread
+from src.integration_test import testq
+
+from scapy.all import *
+
 
 class LiveTrafficPacketFileManager(PacketFileManager):
-    def __init__(self, filename):
+    def __init__(self, ):
         self.packets = []
+        super(LiveTrafficPacketFileManager, self).__init__()
+        self.get_pkts()
 
-    def put(packet):
-        #Use packet to update the view
+    def get_pkts(self):
+        t = Thread(target=self.producer)
+        t.start()
+
+    def producer(self, ):
+        while True:
+            pkt = hookedq.get()
+            if pkt is -1:
+                print('got -1')
+                return
+            else:  # we got the signal to stop
+                self.put(pkt)
+
+    def put(self, packet):
+        # Use packet to update the view
         self.packets.append(packet)
-        self.dissectedModel = self.createDissectedModel()
-        self.binaryModel = self.createBinaryModel()
-        self.HEXModel = self.createHEXModel()
+        x = b" ".join(re.findall(b'..', binascii.hexlify(raw(packet))))
+        self.dissectedModel.appendRow(QtGui.QStandardItem(str(x)[2:-1]))
+        # self.dissectedModel = self.createDissectedModel()
+        # self.binaryModel = self.createBinaryModel()
+        # self.HEXModel = self.createHEXModel()
+
 
 class PCAPFileManager(PacketFileManager):
     def __init__(self, filename):
         self.filename = filename
         self.packets = rdpcap(self.filename)
         super(PCAPFileManager, self).__init__()
-
-
-
-
-
-
-
-
-
-
-
