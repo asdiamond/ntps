@@ -54,6 +54,23 @@ from src.HookSubsystem.HookManager import HookManager
 from src.integration_test import testq
 from src.intercept import intercepted
 
+def prod_test():
+    inter = Thread(target=interception)
+    cons = Thread(target=cons_test)
+    cons.start()
+    inter.start()
+
+def cons_test():
+    while True:
+        p = intercepted.get()
+        print(p)
+        if p is -1:
+            return
+        else:
+            print('in cons_test')
+
+#prod_test()
+
 
 def main():
     hook_collection_manager = HookCollectionManager()

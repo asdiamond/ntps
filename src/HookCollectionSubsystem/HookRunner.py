@@ -5,6 +5,7 @@ from src.integration_test import testq
 from src.intercept import intercepted
 
 from threading import Thread
+from scapy.all import *
 
 
 class HookRunner(Thread):
@@ -18,17 +19,20 @@ class HookRunner(Thread):
     # hooks are run on them
     def run(self, intercept=False):
         while True:
-            packet = testq.get()
+            packet = intercepted.get()
+            #pkt = IP(packet.get_payload())
             modified_packet = self.__manager.run_hooks(packet)
             if modified_packet:
-                print(modified_packet)
+                #packet.set_payload(bytearray(str(modified_packet)))
+                print("in hook runner")
+                #print(modified_packet)
                 if intercept:
                     # give to packet collection
                     hookedq.put(packet)
-
                 else:
                     # nfq.accept the packet, so it goes to its destination
                     print('let my packet go')
+                    packet.accept()
                     # print(modified_packet)
 
 
@@ -57,4 +61,4 @@ def main():
     hooker.start()
 
 
-main()
+#main()

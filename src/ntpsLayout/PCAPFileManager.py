@@ -96,13 +96,15 @@ class LiveTrafficPacketFileManager(PacketFileManager):
         t.start()
 
     def producer(self, ):
+        from src.intercept import intercepted
         while True:
-            pkt = hookedq.get()
+            pkt = intercepted.get()
+            p = IP(pkt.get_payload())
             if pkt is -1:
                 print('got -1')
                 return
             else:  # we got the signal to stop
-                self.put(pkt)
+                self.put(p)
 
     def put(self, packet):
         # Use packet to update the view

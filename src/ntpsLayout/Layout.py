@@ -823,6 +823,9 @@ class Ui_Form(QObject):
             proxy = Thread(target=interceptor.interception)
             proxy.start()
 
+            # TODO Start the hookrunner
+
+
             if self.livePacketManager is None:
                 self.livePacketManager = LiveTrafficPacketFileManager()
                 self.livePacketDissectedListView.setModel(self.livePacketManager.dissectedModel)
