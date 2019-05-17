@@ -9,12 +9,12 @@ URG = 0x20
 ECE = 0x40
 CWR = 0x80
 
-def run(packet):
-    if packet.haslayer(TCP):
+def apply(pkt):
+    if pkt.haslayer(TCP):
         
-        s = packet.flags
+        s = pkt.flags
         
-        if packet and packet.haslayer(IP):
+        if pkt and pkt.haslayer(IP):
             if s & 0x3f == 0x12:#SYN+ACK
                 logger.info("RCV: SYN+ACK")
                 return self.send_synack_ack(pkt)
@@ -23,11 +23,11 @@ def run(packet):
             
             seq1=random.randrange(0,2**32)            
             
-            ip = IP(src = packet.dst,dst= packet.src)
-            syn = TCP(sport= packet.dport,dport=packet.sport,flags='S',seq=seq1)
+            ip = IP(src = pkt.dst,dst= pkt.src)
+            syn = TCP(sport= pkt.dport,dport=pkt.sport,flags='S',seq=seq1)
             SYNACK=sr1(ip/syn)
 
-            ack=TCP(sport=packet.dport, dport=packet.sport, flags='A', seq=SYNACK.ack, ack=SYNACK.seq + 1)# SYN-ACK
+            ack=TCP(sport=pkt.dport, dport=pkt.sport, flags='A', seq=SYNACK.ack, ack=SYNACK.seq + 1)# SYN-ACK
             send(ip/ack)
             
     pkt.show2() 
