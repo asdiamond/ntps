@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 import sys
 
-sys.path.extend(['/Users/aleksandr/ntps'])
+sys.path.extend(['/root/ntps'])
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtCore import QObject, pyqtSlot
@@ -807,17 +807,21 @@ class Ui_Form(QObject):
             # TODO Turn off proxy
             self.livePacketInterceptionBehaviorComboBox.setCurrentIndex(0)
             self.livePacketInterceptionBehaviorComboBox.setEnabled(False)
+
         if index == 1:
             # TODO turn on proxy behavior
 
             self.livePacketInterceptionBehaviorComboBox.setEnabled(True)
         # self.label_3.setText(str(index))
 
+
     @pyqtSlot(int)
     def livePacketInterceptionBehaviorComboBoxIndexChanged(self, index):
+        from src.intercept import interceptor
         # index 0 is off, 1 is on
         if index == 1:
-            testq.fill()
+            proxy = Thread(target=interceptor.interception)
+            proxy.start()
 
             if self.livePacketManager is None:
                 self.livePacketManager = LiveTrafficPacketFileManager()
@@ -828,7 +832,8 @@ class Ui_Form(QObject):
         #     TODO turn on interception behavior
         if index == 0:
             # TODO turn off interception behavior
-            testq.turn_off()
+            #testq.turn_off()
+            interceptor.turn_off()
         self.label_3.setText(str(index))
 
     @pyqtSlot(int)
@@ -973,7 +978,7 @@ class Ui_Form(QObject):
     def packetFromPCAPExpectedReturnTypeLineEdited(self, text):
         self.label_3.setText(text)
 
-    @pyqtSlot(str)
+    
     def packetFromPCAPSelectedFieldNameLineEdited(self, text):
         self.label_3.setText(text)
 
