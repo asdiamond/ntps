@@ -35,8 +35,3 @@ class HookManager:
         for hook in self.hooks:
             hookModel.appendRow(QtGui.QStandardItem(hook.get_name()))
         return hookModel
-
-
-
-
-

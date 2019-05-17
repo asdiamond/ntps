@@ -10,6 +10,7 @@ class HookCollection:
     __num_hooks: int
 
     # Initializer
+
     def __init__(self, name: str, description: str, status: bool, execution_number: int):
         self.__hook_list = []
         self.__name = name
